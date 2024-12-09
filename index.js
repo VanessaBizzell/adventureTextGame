@@ -115,19 +115,26 @@ class Room {
     }
   }
   
-  // for assignment, gigure out how to linkg characters to rooms
+  // for assignment, gigure out how to linking characters to rooms
   
   
-  const Kitchen = new Room("kitchen");
+  const Kitchen = new Room("Kitchen");
   Kitchen.description =
-    "a long narrow room with worktops on either side and a large bench in the middle";
-  const Lounge = new Room("lounge");
-  Lounge.description = "a large room with two sofas and a large fire place";
-  const GamesRoom = new Room("Games Room");
-  GamesRoom.description = "a large room with a pool table at it's centre";
-  const Hall = new Room("hall");
-  Hall.description =
-    "a grand entrance hall with large paintings around the walls";
+    "a hot, noisy room with a huge fireplace";
+  const greatHall= new Room("Great Hall");
+  greatHall.description = "a very large room with high ceilings and long tables";
+  const guardRoom = new Room("Guard Room");
+  guardRoom.description = "a small and dusty room with a round table and a couple of chairs";
+  const Chapel = new Room("Chapel");
+  Chapel.description =
+    "a lovely room with sunlight pouring in through stained glass windows.";
+    const Turret = new Room("Turret");
+  Turret.description =
+    "the stairs opened onto a precarious and windy turret top. Edged by castellated walls, you can see for miles around";
+    const bedChamber = new Room("Bed Chamber");
+  bedChamber.description =
+    "a cosy room with tapestries hanging on the walls and a fire blazing merrily in the stone fireplace";
+
   
   Kitchen.linkRoom("south", Lounge);
   Kitchen.linkRoom("east", Hall);
@@ -160,7 +167,7 @@ class Room {
   
   const startGame = () => {
       //put start room here
-      currentRoom = Kitchen
+      currentRoom = greatHall
       displayRoomInfo(currentRoom)
   
   
