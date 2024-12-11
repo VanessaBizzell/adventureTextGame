@@ -10,12 +10,14 @@ class Room {
     this._description = description;
     this._linkedRooms = {};
     this._linkedCharacters = [];
+    // this._travelMethod = {};
   }
 
   /**
    * Getter method for name - no parameter. Allows access to property name.
    *
    * @returns room name
+   * @author Vanessa Bizzell
    */
   get name() {
     return this._name;
@@ -64,6 +66,17 @@ class Room {
     );
   }
 
+  // /**
+  //  * method to produce a description of how you travel between rooms
+  //  *
+  //  * @returns {string} description of travel method
+  //  * @author Vanessa Bizzell
+  //  * @version 1.0
+  //  */
+  //   describeMove() {
+  //     return `You move ${this._travelMethod}`;
+  //   }
+
   /**
    * a method to produce a description of linked rooms
    *
@@ -75,7 +88,7 @@ class Room {
     const entries = Object.entries(this._linkedRooms);
     let details = [];
     for (const [direction, room] of entries) {
-      let text = ` The ${room._name} is to the ${direction}`;
+      let text = ` The ${room._name} is to the ${direction}`; //could change room name to be door description and/or travel method
       details.push(text);
     }
     return details;
@@ -119,6 +132,7 @@ class Character {
   constructor(name) {
     (this._name = name), (this._description = "");
     this._conversation = "";
+    this._gift;
   }
 
   set name(value) {
@@ -144,6 +158,15 @@ class Character {
     }
     this._conversation = value;
   }
+
+  set gift(value) {
+    if (value.length < 3) {
+      alert("gift description is too short");
+      return;
+    }
+    this._gift = value;
+  }
+
   get name() {
     return this._name;
   }
@@ -156,6 +179,10 @@ class Character {
     return this._conversation;
   }
 
+  get gift() {
+    return this._gift;
+  }
+
   describe() {
     return `You have met the ${this._name}, ${this._description}`;
   }
@@ -163,32 +190,68 @@ class Character {
   converse() {
     return `The ${this._name} says ${this._conversation}`;
   }
+
+  giftGiven() {
+    return `You accept the ${this._name}'s gift of ${this._gift}`;
+  }
 }
+
+/**
+ * Player Class - extension of character class with inventory array
+ *
+ */
+class Player extends Character {
+  constructor(name, description) {
+    super(name, description);
+    this._inventory = [];
+  }
+
+  get inventory() {
+    return this._inventory;
+  }
+
+  /**
+   * method to pass gift into inventory array
+   *
+   * @author Vanessa Bizzell
+   */
+  giftInventory(gift) {
+    this._inventory.push(gift);
+  }
+}
+
+//creates player with empty strings for name and description
+const Player1 = new Player("", "");
 
 //creates individual room objects and adds room descriptions
 const kitchen = new Room("Kitchen");
-kitchen.description = "a hot, noisy room with a huge fireplace";
+kitchen.description =
+  "a hot, noisy room with a huge fireplace. To the east is a large wooden door, to the south west is an open door through which you can see a kitchen garden.";
 const greatHall = new Room("Great Hall");
-greatHall.description = "a very large room with high ceilings and long tables";
+greatHall.description =
+  "a very large room with high ceilings and long tables. It has wooden doors on the north, south , east and west walls.";
 const guardRoom = new Room("Guard Room");
 guardRoom.description =
-  "a small and dusty room with a round table and a couple of chairs";
+  "a small, cold and dusty room with a round table and a couple of chairs. To the north is a large wooden door, to the north west is a smaller door. On the south wall there is a tattered wall hanging. On closer inspection, there is a door built into the wall behind this. It's painted the same colour as the stone and would be hidden if not for the holes in the wall hanging.";
 const chapel = new Room("Chapel");
 chapel.description =
-  "a lovely room with sunlight pouring in through stained glass windows.";
+  "a lovely room with sunlight pouring in through stained glass windows. There is a large wooden door on to the north and a painting on the south west wall. The painting is hanging at an angle indicating it has been recently moved.";
 const turret = new Room("Turret");
 turret.description =
-  "the stairs opened onto a precarious and windy turret top. Edged by castellated walls, you can see for miles around";
+  "the stairs opened onto a precarious and windy turret top. Edged by castellated walls, you can see for miles around. There is a small wooden door to the south";
 const bedChamber = new Room("Bed Chamber");
 bedChamber.description =
-  "a cosy room with tapestries hanging on the walls and a fire blazing merrily in the stone fireplace";
+  "a cosy room with tapestries hanging on the walls and a fire blazing merrily in the stone fireplace. There is a large wooden door to the south and a smaller door on the north wall ";
+const quest = new Room("Rescue Quest");
+quest.description =
+  "the sapphire dragon bows her neck and allows you to climb up. You fly together to the edge of the kingdom where you are left to complete your rescue quest.";
 
 //links the rooms together
 kitchen.linkRoom("west", greatHall);
 kitchen.linkRoom("south east", guardRoom);
 guardRoom.linkRoom("north west", kitchen);
 guardRoom.linkRoom("north", greatHall);
-guardRoom.linkRoom("north east", chapel);
+guardRoom.linkRoom("south", chapel);
 greatHall.linkRoom("east", kitchen);
 greatHall.linkRoom("west", chapel);
 greatHall.linkRoom("north", bedChamber);
@@ -196,27 +259,49 @@ greatHall.linkRoom("south", guardRoom);
 bedChamber.linkRoom("south", greatHall);
 bedChamber.linkRoom("north", turret);
 turret.linkRoom("south", bedChamber);
+turret.linkRoom("fly", quest);
 chapel.linkRoom("west", greatHall);
 chapel.linkRoom("south west", guardRoom);
 
-//creates individual characters and adds descriptions
+//create travel movement (eg down a winding corridor)
+//link travel movement to both rooms with a key value pair
+//OR treat travelling methods like rooms and link as above.
+
+//creates individual characters and adds descriptions and gifts
 const queen = new Character("Queen");
 queen.description =
   "a tall woman sparkling purple eyes. She wears a purple velvet dress with gold embroidery. A gold and sapphire crown rests on her long black hair.";
+queen.gift = "a bag of coins";
+queen.conversation =
+  '"Please find the kidnapped king. Here is a bag of gold coins to help"';
 const knight = new Character("Knight");
 knight.description = "a tired man with curly hair and rusty armour.";
+knight.gift = "a shiny silver sword";
+knight.conversation = '"Where is your weapon? Here is my sword."';
 const cook = new Character("Cook");
 cook.description =
   "a friendly man with a grubby hat and white apron, standing by the spit.";
+cook.conversation =
+  '"You look hungry. Here are provisions to keep you going on your quest"';
+cook.gift = "carefully wrapped food";
 const princess = new Character("Princess");
 princess.description =
   "a cross young woman with purple eyes and black hair, wearing riding gear";
+princess.conversation =
+  '"I am not allowed to rescue the King. Here is my map so that you cand find the Wizards lair."';
+princess.gift = "a rolled map of the area";
 const priest = new Character("Priest");
 priest.description =
   "a soft-spoken bald man with a white robe, stood by the altar.";
+priest.conversation =
+  '"the King is a wise man and I shall miss him. Here is a golden key"';
+priest.gift = "a large gold key";
 const dragon = new Character("Dragon");
 dragon.description =
   "a great purple beast with orange spines, perches on the edge of the turret wall breathing fire";
+dragon.conversation =
+  '"Let me know when you are ready to leave by saying FLY and I will take you on your quest. Here is a gem of great value."';
+dragon.gift = "a purple sapphire";
 
 // links characters to rooms
 kitchen.linkCharacter(cook);
@@ -230,7 +315,7 @@ turret.linkCharacter(dragon);
 const displayRoomInfo = (room) => {
   let occupantMsg = "";
   if (room.character != []) {
-    //logic here for displaying the character in the room and their dialogue
+    //logic here for displaying the character in the room
     occupantMsg = room.character[0].describe();
   } else {
     occupantMsg = "There is no one else in the room.";
@@ -254,6 +339,15 @@ const displayRoomInfo = (room) => {
   //.focus makes it clear that this is only place to type (cursor blinks in box)
 };
 
+const winGame = () => {
+  let inventory = Player1._inventory;
+  if (inventory.includes(queen.gift, dragon.gift, princess.gift)) {
+    return winMsg;
+  }
+
+  return loseMsg;
+};
+
 const startGame = () => {
   //put start room here
   currentRoom = greatHall;
@@ -273,6 +367,7 @@ const startGame = () => {
         "north west",
         "south east",
         "south west",
+        "fly,",
       ];
 
       //convert to lower case so doensn't return false
@@ -280,6 +375,22 @@ const startGame = () => {
         currentRoom = currentRoom.move(command);
         document.getElementById("usertext").value = "";
         displayRoomInfo(currentRoom);
+      } else if (command.toLowerCase() === "talk") {
+        //if talk is in input box then character to converse
+        document.getElementById("speecharea").innerHTML =
+          currentRoom.character[0].converse();
+      } else if (command.toLowerCase() === "take") {
+        //if take is in input box then player to take gift
+        document.getElementById("speecharea").innerHTML =
+          currentRoom.character[0].giftGiven();
+        //gift is passed to player inventory
+        Player1.giftInventory(currentRoom.character[0].gift);
+        // console.log(Player1._inventory);
+      //if active room is turret and command fly then display quest room message and also Win/lose message
+      } else if (currentRoom = turret (command.toLowerCase() === "fly")) {
+        document.getElementById("speecharea").innerHTML =
+          currentRoom.description();
+          winGame();
       } else {
         alert("Not a valid command. Please try again");
         displayRoomInfo(currentRoom);
