@@ -242,7 +242,6 @@ const bedChamber = new Room("Bed Chamber");
 bedChamber.description =
   "a cosy room with tapestries hanging on the walls and a fire blazing merrily in the stone fireplace. There is a large wooden door to the south and a smaller door on the north wall ";
 
-
 //links the rooms together
 kitchen.linkRoom("west", greatHall);
 kitchen.linkRoom("south east", guardRoom);
@@ -258,8 +257,6 @@ bedChamber.linkRoom("north", turret);
 turret.linkRoom("south", bedChamber);
 chapel.linkRoom("west", greatHall);
 chapel.linkRoom("south west", guardRoom);
-
-
 
 //creates individual characters and adds descriptions and gifts
 const queen = new Character("Queen");
@@ -297,7 +294,6 @@ dragon.conversation =
   '"Let me know when you are ready to leave by saying FLY and I will take you on your quest. Here is a gem of great value."';
 dragon.gift = "a purple sapphire";
 
-
 // links characters to rooms
 kitchen.linkCharacter(cook);
 greatHall.linkCharacter(queen);
@@ -305,7 +301,6 @@ guardRoom.linkCharacter(knight);
 chapel.linkCharacter(priest);
 bedChamber.linkCharacter(princess);
 turret.linkCharacter(dragon);
-
 
 //function to display the information about the current room
 const displayRoomInfo = (room) => {
@@ -339,16 +334,33 @@ const displayRoomInfo = (room) => {
 const winGame = () => {
   let inventory = Player1._inventory;
   let winMsg = "";
-  if ((inventory.includes(queen.gift) || inventory.includes(dragon.gift)) && inventory.includes (princess.gift) &&  inventory.includes(cook.gift)) {
-    winMsg = "Congratulations! You rescued the King...you travelled a long, long way, found the Wizards lair and paid him to release the King. The Sapphire Dragon flew you both home where you received riches and acclaim.";
-  } else if (inventory.includes(knight.gift) && inventory.includes(princess.gift) && inventory.includes(cook.gift)) {
-    winMsg = "Congratulations! You rescued the King...you travelled a long, long way, found the Wizards lair and fought an epic battle using your silver sword. You killed the wizard and released the King. The Sapphire Dragon flew you both home where you received riches and acclaim."
-  } else if (!inventory.includes(queen.gift) && !inventory.includes(dragon.gift) && !inventory.includes(knight.gift)) {
-    winMsg = "You did not rescue the King. Unfortunately you did not take an item of value to pay for the King's release. You could have fought and killed the Wizard but you didn't take a weapon either."
+  if (
+    (inventory.includes(queen.gift) || inventory.includes(dragon.gift)) &&
+    inventory.includes(princess.gift) &&
+    inventory.includes(cook.gift)
+  ) {
+    winMsg =
+      "Congratulations! You rescued the King...you travelled a long, long way, found the Wizards lair and paid him to release the King. The Sapphire Dragon flew you both home where you received riches and acclaim.";
+  } else if (
+    inventory.includes(knight.gift) &&
+    inventory.includes(princess.gift) &&
+    inventory.includes(cook.gift)
+  ) {
+    winMsg =
+      "Congratulations! You rescued the King...you travelled a long, long way, found the Wizards lair and fought an epic battle using your silver sword. You killed the wizard and released the King. The Sapphire Dragon flew you both home where you received riches and acclaim.";
+  } else if (
+    !inventory.includes(queen.gift) &&
+    !inventory.includes(dragon.gift) &&
+    !inventory.includes(knight.gift)
+  ) {
+    winMsg =
+      "You did not rescue the King. Unfortunately you did not take an item of value to pay for the King's release. You could have fought and killed the Wizard but you didn't take a weapon either.";
   } else if (!inventory.includes(cook.gift)) {
-    winMsg = "You did not rescue the King. Unfortunately you forgot to take food and starved."
+    winMsg =
+      "You did not rescue the King. Unfortunately you forgot to take food and starved.";
   } else if (!inventory.includes(princess.gift)) {
-    winMsg = "You did not rescue the King. Unfortunately, you forgot to take a map, got horribly lost and are still trying to find your way out of a bog."
+    winMsg =
+      "You did not rescue the King. Unfortunately, you forgot to take a map, got horribly lost and are still trying to find your way out of a bog.";
   }
 
   textContent =
@@ -356,11 +368,11 @@ const winGame = () => {
     "The sapphire dragon who bows her neck and allows you to climb up." +
     "</p>" +
     "<p>" +
-    'She says "Lets fly together to the edge of the kingdom where I will leave you to complete your rescue quest."'+
-    "</p>"+
+    'She says "Lets fly together to the edge of the kingdom where I will leave you to complete your rescue quest."' +
+    "</p>" +
     "<p>" +
     winMsg +
-    "</p>"; 
+    "</p>";
 
   document.getElementById("gameResult").innerHTML = textContent;
 };
@@ -396,7 +408,7 @@ const startGame = () => {
         //if talk is in input box then character to converse
         document.getElementById("speecharea").innerHTML =
           currentRoom.character[0].converse();
-          document.getElementById("usertext").value = "";
+        document.getElementById("usertext").value = "";
       } else if (command.toLowerCase() === "take") {
         //if take is in input box then player to take gift
         document.getElementById("speecharea").innerHTML =
@@ -408,14 +420,11 @@ const startGame = () => {
 
         // if in turret and "fly" is input, move to quest room and display win/lose message
       } else if (command.toLowerCase() === "fly") {
-        
         document.getElementById("usertext").value = "";
-       
-        //display win/lose message in area above user input box
-        
-         winGame();
 
-          
+        //display win/lose message in area above user input box
+
+        winGame();
       } else {
         alert("Not a valid command. Please try again");
         displayRoomInfo(currentRoom);
