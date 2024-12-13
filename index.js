@@ -300,11 +300,11 @@ turret.linkCharacter(dragon);
 //function to display start message
 const startMessage = () => {
   let startMsg =
-    "The King is lost, kidnapped by an evil wizard and taken to a land far, far away. You hvae been tasked with a rescue quest but first, you must collect provisions from the castle. Collect gifts from the castle occupants before starting your quest.";
+    "The King is lost, kidnapped by an evil wizard and taken to a land far, far away. You have been tasked with a rescue quest but first, you must collect provisions from the castle. Collect gifts from the castle occupants before starting your quest.";
 
-  textContent = "<p>" + startMsg + "</p>";
+  textContent = `<p class = 'font-bold'>${startMsg}</p>`;
 
-  document.getElementById("startArea").innerHTML = startMsg;
+  document.getElementById("startArea").innerHTML = textContent;
 };
 
 //function to display interaction instructions
@@ -312,9 +312,9 @@ const interact = () => {
   let interactMsg =
     "Type TALK to speak to castle occupants. Type TAKE to accept what is being offered.";
 
-  textContent = "<p class = 'py-3'>" + interactMsg + "</p>";
+  textContent = `<p class = 'text-blue-400'>${interactMsg}</p>`;
 
-  document.getElementById("interactInstr").innerHTML = interactMsg;
+  document.getElementById("interactInstr").innerHTML = textContent;
 };
 
 //function to display the information about the current room
@@ -327,19 +327,7 @@ const displayRoomInfo = (room) => {
     occupantMsg = "There is no one else in the room.";
   }
 
-  textContent =
-    "<p class = 'py-5'>" +
-    room.describe() +
-    "</p>" +
-    "<p class = 'py-5'>" +
-    occupantMsg +
-    "</p>" +
-    "<p class = 'py-5'>" +
-    room.getDetails() +
-    "</p>" +
-    "<p class = 'py-5'>" +
-    moveMsg +
-    "</p>";
+  textContent = `<p class = 'pt-5 '>${room.describe()}</p><p class = 'pt-5 '>${occupantMsg}</p><p class = 'pt-5'>${room.getDetails()}</p><p class = 'py-5 font-bold'>${moveMsg}</p>`;
 
   document.getElementById("textarea").innerHTML = textContent;
   document.getElementById("buttonarea").innerHTML =
@@ -380,16 +368,7 @@ const winGame = () => {
       "You did not rescue the King. Unfortunately, you forgot to take a map, got horribly lost and are still trying to find your way out of a bog.";
   }
 
-  textContent =
-    "<p>" +
-    "The sapphire dragon who bows her neck and allows you to climb up." +
-    "</p>" +
-    "<p>" +
-    'She says "Let&apos;s fly together to the edge of the kingdom where I will leave you to complete your rescue quest."' +
-    "</p>" +
-    "<p>" +
-    winMsg +
-    "</p>";
+  textContent = `<p class = 'pt-5' >The sapphire dragon who bows her neck and allows you to climb up.</p><p class 'pt=5'>She says "Let&apos;s fly together to the edge of the kingdom where I will leave you to complete your rescue quest."</p><p class = 'py-5 font-bold'>${winMsg}</p>`;
 
   document.getElementById("gameResult").innerHTML = textContent;
 };
