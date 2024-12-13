@@ -274,7 +274,7 @@ const princess = new Character("Princess");
 princess.description =
   "a cross young woman with purple eyes and black hair, wearing riding gear";
 princess.conversation =
-  '"I am not allowed to rescue the King. Here is my map so that you can find the Wizard&aposs lair."';
+  '"I am not allowed to rescue the King. Here is my map so that you can find the Wizard&apos;s lair."';
 princess.gift = "a rolled map of the area";
 const priest = new Character("Priest");
 priest.description =
@@ -331,7 +331,7 @@ const displayRoomInfo = (room) => {
 
   document.getElementById("textarea").innerHTML = textContent;
   document.getElementById("buttonarea").innerHTML =
-    '> <input type = "text" id ="usertext" />';
+    '> <input type = "text" id ="usertext" class = "w-10/12 border-0"/>';
   document.getElementById("usertext").focus();
 };
 
@@ -345,14 +345,14 @@ const winGame = () => {
     inventory.includes(cook.gift)
   ) {
     winMsg =
-      "Congratulations! You rescued the King...you travelled a long, long way, found the Wizards lair and paid him to release the King. The Sapphire Dragon flew you both home where you received riches and acclaim.";
+      "Congratulations! You rescued the King...you travelled a long, long way, found the Wizard's lair and paid him to release the King. The Sapphire Dragon flew you both home where you received riches and acclaim.";
   } else if (
     inventory.includes(knight.gift) &&
     inventory.includes(princess.gift) &&
     inventory.includes(cook.gift)
   ) {
     winMsg =
-      "Congratulations! You rescued the King...you travelled a long, long way, found the Wizards lair and fought an epic battle using your silver sword. You killed the wizard and released the King. The Sapphire Dragon flew you both home where you received riches and acclaim.";
+      "Congratulations! You rescued the King...you travelled a long, long way, found the Wizard's lair and fought an epic battle using your silver sword. You killed the wizard and released the King. The Sapphire Dragon flew you both home where you received riches and acclaim.";
   } else if (
     !inventory.includes(queen.gift) &&
     !inventory.includes(dragon.gift) &&
@@ -371,6 +371,10 @@ const winGame = () => {
   textContent = `<p class = 'pt-5' >The sapphire dragon who bows her neck and allows you to climb up.</p><p class 'pt=5'>She says "Let&apos;s fly together to the edge of the kingdom where I will leave you to complete your rescue quest."</p><p class = 'py-5 font-bold'>${winMsg}</p>`;
 
   document.getElementById("gameResult").innerHTML = textContent;
+  document.getElementById("speecharea").innerHTML = "";
+  document.getElementById("startArea").innerHTML = "";
+  document.getElementById("usertext").value = "";
+  document.getElementById("textarea").innerHTML = "";
 };
 
 //function to start game play
@@ -416,9 +420,8 @@ const startGame = () => {
         Player1.giftInventory(currentRoom.character[0].gift);
         // if in turret and "fly" is input, move to quest room and display win/lose message
       } else if (command.toLowerCase() === "fly") {
-        document.getElementById("usertext").value = "";
         //display win/lose message in area above user input box
-        winGame();
+        winGame()
       } else {
         alert("Not a valid command. Please try again");
         displayRoomInfo(currentRoom);
