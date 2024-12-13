@@ -34,7 +34,8 @@ class Room {
    * Setter method for name. Sets value for name. Validates value (name) provided - alerts if too short. Could validate no numbers etc.
    *
    * @param value
-   *
+   * @author Vanessa Bizzell
+   * @version 1.0
    */
   set name(value) {
     if (value.length < 4) {
@@ -65,17 +66,6 @@ class Room {
     );
   }
 
-  // /**
-  //  * method to produce a description of how you travel between rooms
-  //  *
-  //  * @returns {string} description of travel method
-  //  * @author Vanessa Bizzell
-  //  * @version 1.0
-  //  */
-  //   describeMove() {
-  //     return `You move ${this._travelMethod}`;
-  //   }
-
   /**
    * a method to produce a description of linked rooms
    *
@@ -87,7 +77,7 @@ class Room {
     const entries = Object.entries(this._linkedRooms);
     let details = [];
     for (const [direction, room] of entries) {
-      let text = ` The ${room._name} is to the ${direction}`; //could change room name to be door description and/or travel method
+      let text = ` The ${room._name} is to the ${direction}`;
       details.push(text);
     }
     return details;
@@ -98,7 +88,8 @@ class Room {
    *
    * @param direction string defining direction for character to move
    * @returns {object} current room or new room
-   *
+   * @author Vanessa Bizzell
+   * @version 1.0
    */
   move(direction) {
     if (direction in this._linkedRooms) {
@@ -114,7 +105,8 @@ class Room {
    *
    * @param {string} direction (key) to move to get to this room
    * @param {object} roomToLink (value) room in that direction
-   *
+   * @author Vanessa Bizzell
+   * @version 1.0
    */
   linkRoom(direction, roomToLink) {
     this._linkedRooms[direction] = roomToLink;
@@ -198,6 +190,8 @@ class Character {
 /**
  * Player Class - extension of character class with inventory array
  *
+ * @author Vanessa Bizzell
+ * @version 1.0
  */
 class Player extends Character {
   constructor(name, description) {
@@ -213,6 +207,7 @@ class Player extends Character {
    * method to pass gift into inventory array
    *
    * @author Vanessa Bizzell
+   * @version 1.0
    */
   giftInventory(gift) {
     this._inventory.push(gift);
@@ -279,7 +274,7 @@ const princess = new Character("Princess");
 princess.description =
   "a cross young woman with purple eyes and black hair, wearing riding gear";
 princess.conversation =
-  '"I am not allowed to rescue the King. Here is my map so that you can find the Wizards lair."';
+  '"I am not allowed to rescue the King. Here is my map so that you can find the Wizard&aposs lair."';
 princess.gift = "a rolled map of the area";
 const priest = new Character("Priest");
 priest.description =
@@ -302,32 +297,54 @@ chapel.linkCharacter(priest);
 bedChamber.linkCharacter(princess);
 turret.linkCharacter(dragon);
 
+//function to display start message
+const startMessage = () => {
+  let startMsg =
+    "The King is lost, kidnapped by an evil wizard and taken to a land far, far away. You hvae been tasked with a rescue quest but first, you must collect provisions from the castle. Collect gifts from the castle occupants before starting your quest.";
+
+  textContent = "<p>" + startMsg + "</p>";
+
+  document.getElementById("startArea").innerHTML = startMsg;
+};
+
+//function to display interaction instructions
+const interact = () => {
+  let interactMsg =
+    "Type TALK to speak to castle occupants. Type TAKE to accept what is being offered.";
+
+  textContent = "<p class = 'py-3'>" + interactMsg + "</p>";
+
+  document.getElementById("interactInstr").innerHTML = interactMsg;
+};
+
 //function to display the information about the current room
 const displayRoomInfo = (room) => {
   let occupantMsg = "";
+  let moveMsg = "Which way would you like to go?";
   if (room.character != []) {
-    //logic here for displaying the character in the room
     occupantMsg = room.character[0].describe();
   } else {
     occupantMsg = "There is no one else in the room.";
   }
 
   textContent =
-    "<p>" +
+    "<p class = 'py-5'>" +
     room.describe() +
     "</p>" +
-    "<p>" +
+    "<p class = 'py-5'>" +
     occupantMsg +
     "</p>" +
-    "<p>" +
+    "<p class = 'py-5'>" +
     room.getDetails() +
+    "</p>" +
+    "<p class = 'py-5'>" +
+    moveMsg +
     "</p>";
 
   document.getElementById("textarea").innerHTML = textContent;
   document.getElementById("buttonarea").innerHTML =
     '> <input type = "text" id ="usertext" />';
   document.getElementById("usertext").focus();
-  //.focus makes it clear that this is only place to type (cursor blinks in box)
 };
 
 //function to check player inventory and display win/lose message
@@ -368,7 +385,7 @@ const winGame = () => {
     "The sapphire dragon who bows her neck and allows you to climb up." +
     "</p>" +
     "<p>" +
-    'She says "Lets fly together to the edge of the kingdom where I will leave you to complete your rescue quest."' +
+    'She says "Let&apos;s fly together to the edge of the kingdom where I will leave you to complete your rescue quest."' +
     "</p>" +
     "<p>" +
     winMsg +
@@ -377,10 +394,12 @@ const winGame = () => {
   document.getElementById("gameResult").innerHTML = textContent;
 };
 
+//function to start game play
 const startGame = () => {
-  //put start room here
+  startMessage();
   currentRoom = greatHall;
   displayRoomInfo(currentRoom);
+  interact();
 
   //adds event listener to whole page
   document.addEventListener("keydown", (event) => {
@@ -398,7 +417,7 @@ const startGame = () => {
         "south west",
       ];
 
-      //convert to lower case so doensn't return false
+      //convert to lower case so doesn't return false
       if (directions.includes(command.toLowerCase())) {
         currentRoom = currentRoom.move(command);
         document.getElementById("usertext").value = "";
@@ -416,14 +435,10 @@ const startGame = () => {
         //gift is passed to player inventory
         document.getElementById("usertext").value = "";
         Player1.giftInventory(currentRoom.character[0].gift);
-        // console.log(Player1._inventory);
-
         // if in turret and "fly" is input, move to quest room and display win/lose message
       } else if (command.toLowerCase() === "fly") {
         document.getElementById("usertext").value = "";
-
         //display win/lose message in area above user input box
-
         winGame();
       } else {
         alert("Not a valid command. Please try again");
