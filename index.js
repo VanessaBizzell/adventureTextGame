@@ -331,7 +331,7 @@ const displayRoomInfo = (room) => {
 
   document.getElementById("textarea").innerHTML = textContent;
   document.getElementById("buttonarea").innerHTML =
-    '> <input type = "text" id ="usertext" class = "w-10/12 border-0"/>';
+    '> <input type = "text" id ="usertext" class = "w-10/12 border-2 border-purple-400 bg-white rounded-md "/>';
   document.getElementById("usertext").focus();
 };
 
@@ -387,8 +387,10 @@ const startGame = () => {
   //adds event listener to whole page
   document.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-      // grab the contents of the input box
-      const command = document.getElementById("usertext").value;
+      // grab the contents of the input box and convert to lowercase
+      const command = document
+        .getElementById("usertext")
+        .value.toLowerCase("usertext");
       const directions = [
         "north",
         "south",
@@ -400,18 +402,17 @@ const startGame = () => {
         "south west",
       ];
 
-      //convert to lower case so doesn't return false
-      if (directions.includes(command.toLowerCase())) {
+      if (directions.includes(command)) {
         currentRoom = currentRoom.move(command);
         document.getElementById("usertext").value = "";
         displayRoomInfo(currentRoom);
         document.getElementById("speecharea").innerHTML = "";
-      } else if (command.toLowerCase() === "talk") {
+      } else if (command === "talk") {
         //if talk is in input box then character to converse
         document.getElementById("speecharea").innerHTML =
           currentRoom.character[0].converse();
         document.getElementById("usertext").value = "";
-      } else if (command.toLowerCase() === "take") {
+      } else if (command === "take") {
         //if take is in input box then player to take gift
         document.getElementById("speecharea").innerHTML =
           currentRoom.character[0].giftGiven();
@@ -419,9 +420,9 @@ const startGame = () => {
         document.getElementById("usertext").value = "";
         Player1.giftInventory(currentRoom.character[0].gift);
         // if in turret and "fly" is input, move to quest room and display win/lose message
-      } else if (command.toLowerCase() === "fly") {
+      } else if (command === "fly") {
         //display win/lose message in area above user input box
-        winGame()
+        winGame();
       } else {
         alert("Not a valid command. Please try again");
         displayRoomInfo(currentRoom);
